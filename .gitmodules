@@ -1,0 +1,4 @@
+[submodule "backend"]
+	path = backend
+	url = git@github.com:andrew-ma/backend.git
+	branch = main
