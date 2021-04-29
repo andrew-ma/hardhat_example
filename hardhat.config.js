@@ -1,6 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 const path = require("path");
-const exec = require("child_process").exec;
+const execFileSync = require("child_process").execFileSync;
 
 const appRoot = path.resolve(__dirname);
 
@@ -19,21 +19,14 @@ task("alchemy_url", "Prints alchemy url", async () => {
 });
 
 task("output", "Run flatten task with result passed through bash script and saved as file 'output.txt'")
-    .addParam("file", "The solidity file that will be flattened")
+    .addVariadicPositionalParam("files", "Solidity contract files to be flattened")
     .setAction(async (taskArguments) => {
         const bashScriptFilename = path.join(appRoot, "output_task.sh");
+        console.log(`Running: \`${bashScriptFilename} ` + taskArguments.files.map((x) => `"${x}"`).join(" ") + "`");
 
-        console.log(`Running \`bash "${bashScriptFilename}" "${taskArguments["file"]}"\``);
+        execFileSync(bashScriptFilename, [...taskArguments.files]);
 
-        const myShellScript = exec(`bash "${bashScriptFilename}" "${taskArguments["file"]}"`);
-        console.log(`Generated file "${path.resolve(path.join(".", "output"))}"`);
-
-        myShellScript.stdout.on("data", (data) => {
-            console.log(data);
-        });
-        myShellScript.stderr.on("data", (data) => {
-            console.error(data);
-        });
+        console.log(`Finished running command`);
     });
 
 // You need to export an object to set up your config
