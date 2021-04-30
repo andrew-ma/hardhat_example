@@ -1,3 +1,4 @@
+require("dotenv").config();
 require("@nomiclabs/hardhat-waffle");
 const path = require("path");
 const execFileSync = require("child_process").execFileSync;
@@ -36,12 +37,41 @@ task("output", "Run flatten task with result passed through bash script and save
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-    solidity: "0.8.1",
-    // networks: {
-    //     hardhat: {
-    //         forking: {
-    //             url: process.env.ALCHEMY_MAINNET_RPC_URL,
-    //         },
-    //     },
-    // },
+    solidity: {
+        version: "0.8.1",
+        settings: {
+            optimizer: {
+                enabled: true,
+                runs: 200,
+            },
+        },
+    },
+    paths: {
+        sources: "./contracts",
+        tests: "./test",
+        cache: "./cache",
+        artifacts: "./artifacts",
+    },
+    mocha: {
+        timeout: 20000,
+    },
+    networks: {
+        // hardhat: {
+        //     forking: {
+        //         url: process.env.ALCHEMY_MAINNET_RPC_URL,
+        //     },
+        // },
+        // ropsten: {
+        //     url: process.env.ALCHEMY_ROPSTEN_RPC_URL,
+        //     accounts: {
+        //         mnemonic: process.env.ALCHEMY_ROPSTEN_MNEMONIC,
+        //     },
+        // },
+        // rinkeby: {
+        //     url: process.env.ALCHEMY_RINKEBY_RPC_URL,
+        //     accounts: {
+        //         mnemonic: process.env.ALCHEMY_RINKEBY_MNEMONIC,
+        //     },
+        // },
+    },
 };
