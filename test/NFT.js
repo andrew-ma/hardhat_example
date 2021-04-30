@@ -69,14 +69,13 @@ describe("NFT contract", () => {
             it("Should set the admin role for MINTER_ROLE as ADMIN_ROLE", async () => {
                 expect(await nft.getRoleAdmin(MINTER_ROLE)).to.equal(ADMIN_ROLE);
             });
-
-            // it("Should allow contract owner");
         });
-
-        // describe("");
     });
 
     describe("Minting", () => {
+        // backend url prefix for nft URIs
+        const baseURI = 'https://pacific-hollows-97228.herokuapp.com/';
+        
         beforeEach(async () => {
             // new instance of nft to make it easy to test multiple mint tokens in separate tests
             nft = await NFTFactory.deploy();
@@ -116,8 +115,8 @@ describe("NFT contract", () => {
             expect(tokenId2).to.equal(1);
 
             // get tokenURI string using token ID
-            expect(await nft.tokenURI(tokenId1)).to.equal(originalURIString1);
-            expect(await nft.tokenURI(tokenId2)).to.equal(originalURIString2);
+            expect(await nft.tokenURI(tokenId1)).to.equal(baseURI + originalURIString1);
+            expect(await nft.tokenURI(tokenId2)).to.equal(baseURI + originalURIString2);
         });
     });
 });

@@ -78,6 +78,10 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
         super._burn(tokenId);
     }
 
+    function _baseURI() internal pure override returns (string memory) {
+        return "https://pacific-hollows-97228.herokuapp.com/";
+    }
+
     function tokenURI(uint256 tokenId)
         public
         view
