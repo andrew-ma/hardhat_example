@@ -34,11 +34,11 @@ async function main() {
 
     const TokenFactory = await ethers.getContractFactory(CONTRACT_NAME);
 
-    console.log(`Deploying contract ${CONTRACT_NAME}`);
+    console.log(`Deploying contract: '${CONTRACT_NAME}'`);
     const token = await TokenFactory.deploy();
     await token.deployed();
 
-    console.log(`${CONTRACT_NAME} deployed to address:`, token.address);
+    console.log(`'${CONTRACT_NAME}' deployed to address:`, token.address);
 
     saveFrontendFiles(token);
 }

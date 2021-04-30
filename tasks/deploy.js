@@ -10,7 +10,7 @@ task("deploy", `Run the "${SCRIPT_FILENAME}" script`).setAction(async () => {
     const SCRIPT_FILE_PATH = path.join(currentScriptDir, "..", "scripts", SCRIPT_FILENAME);
     console.log(`Running: \`npx hardhat run ${SCRIPT_FILE_PATH} ${OPTIONAL_ARGS.join(" ")}\``);
 
-    execFileSync("npx", ["hardhat", "run", SCRIPT_FILE_PATH, ...OPTIONAL_ARGS]);
+    execFileSync("npx", ["hardhat", "run", SCRIPT_FILE_PATH, ...OPTIONAL_ARGS], { stdio: "inherit" });
 
     console.log(`Finished running command`);
 });

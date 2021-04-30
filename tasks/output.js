@@ -9,7 +9,7 @@ task("output", "Run flatten task with result passed through bash script and save
         const bashScriptFilename = path.join(currentScriptDir, "output_task.sh");
         console.log(`Running: \`${bashScriptFilename} ` + taskArguments.files.map((x) => `"${x}"`).join(" ") + "`");
 
-        execFileSync(bashScriptFilename, [...taskArguments.files]);
+        execFileSync(bashScriptFilename, [...taskArguments.files], { stdio: "inherit" });
 
         console.log(`Finished running command`);
     });
