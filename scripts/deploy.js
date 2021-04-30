@@ -8,10 +8,10 @@ const ethers = hre.ethers;
 const path = require("path");
 const fs = require("fs");
 
-const appRoot = path.resolve(__dirname);
+const currentScriptDir = path.resolve(__dirname);
 
 const CONTRACT_NAME = "NFT";
-const FRONTEND_ARTIFACTS_DIR = path.join(appRoot, "frontend", "src", "contracts");
+const FRONTEND_ARTIFACTS_DIR = path.join(currentScriptDir, "../", "frontend", "src", "contracts");
 
 async function main() {
     // Hardhat always runs the compile task when running scripts with its command
@@ -40,22 +40,24 @@ async function main() {
 
     console.log(`${CONTRACT_NAME} deployed to address:`, token.address);
 
-    // save the contract's artifacts and address in the frontend directory, so the frontend's ethereum library (web3 or ethersjs) can initialize a contract object
     saveFrontendFiles(token);
 }
 
 function saveFrontendFiles(token) {
+    /* 
+    Save the contract's artifact with ABI and address in the frontend directory, so the frontend's ethereum library (web3 or ethersjs) can initialize a contract object
+    that can call and send contract functions
+    */
     if (!fs.existsSync(FRONTEND_ARTIFACTS_DIR)) {
         fs.mkdirSync(FRONTEND_ARTIFACTS_DIR);
     }
 
-    fs.writeFileSync(path.join(FRONTEND_ARTIFACTS_DIR, "/contract-address.json"), JSON.stringify({ Token: token.address }));
+    // Save address of deployed contract file in "DeployedAddress.json" with key "DeployedAddress"
+    fs.writeFileSync(path.join(FRONTEND_ARTIFACTS_DIR, "DeployedAddress.json"), JSON.stringify({ DeployedAddress: token.address }));
 
+    // Save contract's artifact with ABI in "Token.json" to FRONTEND_ARTIFACTS_DIR
     const TokenArtifact = artifacts.readArtifactSync(CONTRACT_NAME);
-
-    // fs.writeFileSync(
-    //     contractsDir + "/"
-    // )
+    fs.writeFileSync(path.join(FRONTEND_ARTIFACTS_DIR, "Token.json"), JSON.stringify(TokenArtifact));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
