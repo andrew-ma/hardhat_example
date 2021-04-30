@@ -7,6 +7,7 @@ require("@nomiclabs/hardhat-waffle");
 require("./tasks/accounts");
 require("./tasks/alchemy_url");
 require("./tasks/output");
+require("./tasks/deploy");
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
