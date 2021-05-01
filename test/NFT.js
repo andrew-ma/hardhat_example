@@ -74,39 +74,30 @@ describe("NFT contract", () => {
 
     describe("Minting", () => {
         // backend url prefix for nft URIs
-        const baseURI = 'https://pacific-hollows-97228.herokuapp.com/';
-        
+        const baseURI = "http://127.0.0.1:4000/";
+
         beforeEach(async () => {
             // new instance of nft to make it easy to test multiple mint tokens in separate tests
             nft = await NFTFactory.deploy();
         });
 
         it("Should have one token in totalSupply after creating a collectible", async () => {
-            await nft.createCollectible("test1");
+            await nft.createNewToken();
             expect(await nft.totalSupply()).to.equal(1);
         });
 
         it("Should have 3 tokens in totalSupply after creating 3 collectibles", async () => {
-            await nft.createCollectible("test1");
-            await nft.createCollectible("test2");
-            await nft.createCollectible("test3");
+            await nft.createNewToken();
+            await nft.createNewToken();
+            await nft.createNewToken();
             expect(await nft.totalSupply()).to.equal(3);
         });
 
-        it("Should allow creating collectibles with same URI data", async () => {
-            await nft.createCollectible("test1");
-            await nft.createCollectible("test1");
-            await nft.createCollectible("test1");
-        });
-
         it("Should match the tokenURI string retrieved using token ID", async () => {
-            const originalURIString1 = "test1";
-
-            const tx1 = await nft.createCollectible(originalURIString1);
+            const tx1 = await nft.createNewToken();
             const receipt1 = await tx1.wait();
 
-            const originalURIString2 = "test2";
-            const tx2 = await nft.createCollectible(originalURIString2);
+            const tx2 = await nft.createNewToken();
             const receipt2 = await tx2.wait();
 
             const tokenId1 = getTokenId(receipt1);
@@ -115,8 +106,8 @@ describe("NFT contract", () => {
             expect(tokenId2).to.equal(1);
 
             // get tokenURI string using token ID
-            expect(await nft.tokenURI(tokenId1)).to.equal(baseURI + originalURIString1);
-            expect(await nft.tokenURI(tokenId2)).to.equal(baseURI + originalURIString2);
+            expect(await nft.tokenURI(tokenId1)).to.equal(baseURI + tokenId1.toString());
+            expect(await nft.tokenURI(tokenId2)).to.equal(baseURI + tokenId2.toString());
         });
     });
 });

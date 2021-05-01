@@ -54,19 +54,18 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    function createCollectible(string memory _tokenURI)
-        public
-        onlyMinter
-        returns (uint256)
-    {
+    /*
+     * Automatically increments Token ID, Mints a new Token with that Token ID, and Sets URI of new Token
+     */
+    function createNewToken() public payable onlyMinter returns (uint256) {
         uint256 newItemId = totalSupply();
         // safely mint a new token and transfers ownership to msg.sender
         _safeMint(msg.sender, newItemId);
         // set the token's tokenURI string data
-        _setTokenURI(newItemId, _tokenURI);
-        // _beforeTokenTransfer hook is auto called, which changes OwnerEnumeration
+        _setTokenURI(newItemId, uint2str(newItemId));
+        // _beforeTokenTransfer hook is auto called, which updates Enumeration
 
-        // console.log("Newly created item", newItemId);
+        console.log(totalSupply());
         return newItemId;
     }
 
@@ -79,7 +78,8 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://pacific-hollows-97228.herokuapp.com/";
+        // return "https://pacific-hollows-97228.herokuapp.com/";
+        return "http://127.0.0.1:4000/";
     }
 
     function tokenURI(uint256 tokenId)
@@ -100,5 +100,26 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    /* Helper Functions */
+    function uint2str(uint256 _i) internal pure returns (string memory) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint256 j = _i;
+        uint256 length;
+        while (j != 0) {
+            length++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(length);
+        uint256 k = length;
+        j = _i;
+        while (j != 0) {
+            bstr[--k] = bytes1(uint8(48 + (j % 10)));
+            j /= 10;
+        }
+        return string(bstr);
     }
 }
