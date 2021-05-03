@@ -30,7 +30,7 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
         _;
     }
 
-    constructor() ERC721("My hardhat token", "MHT") {
+    constructor() ERC721("AltFlip", "ALT") {
         // Set contract owner as DEFAULT_ADMIN_ROLE so for all the roles by default it can run grantRole() and revokeRole()
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         // Give contract owner all the roles
@@ -43,6 +43,8 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
         // Setup ADMIN_ROLE to be the admin role for MINTER_ROLE, so accounts with ADMIN_ROLE can grant and revoke MINTER_ROLE accounts
         _setRoleAdmin(MINTER_ROLE, ADMIN_ROLE);
     }
+
+    /* Events */
 
     /* Token Transfer Functions */
 
@@ -58,15 +60,15 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
      * Automatically increments Token ID, Mints a new Token with that Token ID, and Sets URI of new Token
      */
     function createNewToken() public payable onlyMinter returns (uint256) {
-        uint256 newItemId = totalSupply();
+        uint256 newTokenId = totalSupply();
         // safely mint a new token and transfers ownership to msg.sender
-        _safeMint(msg.sender, newItemId);
-        // set the token's tokenURI string data
-        _setTokenURI(newItemId, uint2str(newItemId));
+        _safeMint(msg.sender, newTokenId);
+        // set the token's tokenURI that is added to baseURI
+        _setTokenURI(newTokenId, uint2str(newTokenId));
         // _beforeTokenTransfer hook is auto called, which updates Enumeration
 
-        console.log(totalSupply());
-        return newItemId;
+        console.log(newTokenId);
+        return newTokenId;
     }
 
     function _burn(uint256 tokenId)
@@ -79,7 +81,7 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl {
 
     function _baseURI() internal pure override returns (string memory) {
         // return "https://pacific-hollows-97228.herokuapp.com/";
-        return "http://127.0.0.1:4000/";
+        return "http:/127.0.0.1:4000/";
     }
 
     function tokenURI(uint256 tokenId)

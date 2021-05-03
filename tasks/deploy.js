@@ -4,13 +4,19 @@ const execFileSync = require("child_process").execFileSync;
 const currentScriptDir = path.resolve(__dirname);
 
 const SCRIPT_FILENAME = "deploy.js";
-const OPTIONAL_ARGS = ["--network", "localhost"];
+let OPTIONAL_ARGS = ["--network", "localhost"];
 
-task("deploy", `Run the "${SCRIPT_FILENAME}" script`).setAction(async () => {
-    const SCRIPT_FILE_PATH = path.join(currentScriptDir, "..", "scripts", SCRIPT_FILENAME);
-    console.log(`Running: \`npx hardhat run ${SCRIPT_FILE_PATH} ${OPTIONAL_ARGS.join(" ")}\``);
+task("deploy", `Run the "${SCRIPT_FILENAME}" script`)
+    // .addOptionalParam("docker", "The IP address of network like Docker network")
+    .setAction(async (taskArguments) => {
+        if (taskArguments.docker) {
+            OPTIONAL_ARGS = ["--network", "docker"];
+        }
 
-    execFileSync("npx", ["hardhat", "run", SCRIPT_FILE_PATH, ...OPTIONAL_ARGS], { stdio: "inherit" });
+        const SCRIPT_FILE_PATH = path.join(currentScriptDir, "..", "scripts", SCRIPT_FILENAME);
+        console.log(`Running: \`npx hardhat run ${SCRIPT_FILE_PATH} ${OPTIONAL_ARGS.join(" ")}\``);
 
-    console.log(`Finished running command`);
-});
+        execFileSync("npx", ["hardhat", "run", SCRIPT_FILE_PATH, ...OPTIONAL_ARGS], { stdio: "inherit" });
+
+        console.log(`Finished running command`);
+    });

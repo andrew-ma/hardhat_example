@@ -58,6 +58,8 @@ function saveFrontendFiles(token) {
     // Save contract's artifact with ABI in "Token.json" to FRONTEND_ARTIFACTS_DIR
     const TokenArtifact = artifacts.readArtifactSync(CONTRACT_NAME);
     fs.writeFileSync(path.join(FRONTEND_ARTIFACTS_DIR, "Token.json"), JSON.stringify(TokenArtifact));
+
+    console.log(`Saved ABI file and DeployedAddress to ${path.resolve(FRONTEND_ARTIFACTS_DIR)}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

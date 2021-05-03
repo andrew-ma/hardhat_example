@@ -6,8 +6,9 @@ require("@nomiclabs/hardhat-waffle");
 // Import Tasks
 require("./tasks/accounts");
 require("./tasks/alchemy_url");
-require("./tasks/output");
+require("./tasks/preprocessor");
 require("./tasks/deploy");
+require("./tasks/output");
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -17,7 +18,7 @@ require("./tasks/deploy");
  */
 module.exports = {
     solidity: {
-        version: "0.8.1",
+        version: "0.8.0",
         settings: {
             optimizer: {
                 enabled: true,
@@ -35,6 +36,12 @@ module.exports = {
         timeout: 20000,
     },
     networks: {
+        localhost: {
+            url: "http://127.0.0.1:8545",
+        },
+        docker: {
+            url: "http://blockchain:8545",
+        },
         // hardhat: {
         //     forking: {
         //         url: process.env.ALCHEMY_MAINNET_RPC_URL,
