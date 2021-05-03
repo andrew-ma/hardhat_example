@@ -7,7 +7,7 @@ const SCRIPT_FILENAME = "deploy.js";
 let OPTIONAL_ARGS = ["--network", "localhost"];
 
 task("deploy", `Run the "${SCRIPT_FILENAME}" script`)
-    // .addOptionalParam("docker", "The IP address of network like Docker network")
+    .addOptionalParam("docker", "The IP address of network like Docker network")
     .setAction(async (taskArguments) => {
         if (taskArguments.docker) {
             OPTIONAL_ARGS = ["--network", "docker"];

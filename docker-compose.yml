@@ -4,31 +4,33 @@ services:
         image: andrewma/blockchain
         ports:
             - "8545:8545"
+        volumes:
+            - "contracts:/usr/src/app/frontend/src/contracts"
     deploy_blockchain:
         build: .
         image: andrewma/blockchain
-        command: npx hardhat deploy
+        command: npx hardhat deploy --docker yes
         depends_on:
             - "blockchain"
         volumes:
             - "contracts:/usr/src/app/frontend/src/contracts"
-    # backend:
-    #     image: andrewma/backend
-    #     ports:
-    #         - "4000:4000"
-    #     depends_on:
-    #         - "blockchain"
-    #         - "deploy_blockchain"
-    # frontend:
-    #     image: andrewma/frontend
-    #     ports:
-    #         - "3000:3000"
-    #     depends_on:
-    #         - "blockchain"
-    #         - "deploy_blockchain"
-    #         - "backend"
-    #     volumes:
-    #         - "contracts:/usr/src/app/src/contracts"
+    backend:
+        image: andrewma/backend
+        ports:
+            - "4000:4000"
+        depends_on:
+            - "blockchain"
+            - "deploy_blockchain"
+    frontend:
+        image: andrewma/frontend
+        ports:
+            - "3000:3000"
+        depends_on:
+            - "blockchain"
+            - "deploy_blockchain"
+            - "backend"
+        volumes:
+            - "contracts:/usr/src/app/src/contracts"
 volumes:
     contracts:
 
