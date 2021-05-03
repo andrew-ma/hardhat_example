@@ -33,6 +33,3 @@ services:
             - "contracts:/usr/src/app/src/contracts"
 volumes:
     contracts:
-
-networks:
-    mynet:
